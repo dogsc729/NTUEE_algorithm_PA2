@@ -16,7 +16,7 @@
 #include "../lib/tm_usage.h"
 
 using namespace std;
-
+void MAXIMUM_PLANAR_SUBSET(int, int);
 void help_message()
 {
     cout << "usage: ./mps <input file name> <output file name>" << endl;
@@ -33,19 +33,42 @@ int main(int argc, char *argv[])
     CommonNs::TmStat stat;
     //////////// read the input file /////////////
 
-    char buffer[200];
     fstream fin(argv[1]);
     fstream fout;
     fout.open(argv[2], ios::out);
-    fin.getline(buffer, 200);
-    fin.getline(buffer, 200);
-    int junk, num;
-    vector<int> data;
-    while (fin >> junk >> num)
-        data.push_back(num); // data[0] will be the first data.
-                             // data[1] will be the second data and so on.
-
-    //////////// the sorting part ////////////////
-    cout << "fuck" << endl;
+    int size;
+    fin >> size;
+    cout << size << endl;
+    int i, j;
+    map<int, int> data;
+    while (fin >> i >> j)
+    {
+        data[i] = j;
+        data[j] = i;
+        cout << data[i] << endl;
+        cout << data[j] << endl;
+    }
     return 0;
+}
+
+void MAXIMUM_PLANAR_SUBSET(int c, int n)
+{
+    int **M = new int*[2*n]
+    for(int i=0;i<(2*n);i++)
+    M[i] = new int[2*n]
+    for (int i = 0; i < (2*n - 1); i++)
+    {
+        M[i][i] = 0;
+    }
+    for (int l = 0; l < (2*n - 1); l++)
+    {
+        for (int i = 0; i < (2*n - l); i++)
+        {
+            int j = i + l;
+            if (chord kj is in c && !(k >= i && k <= j))
+                M[i][j] = M[i][j - 1];
+            else if ()
+        }
+    }
+    return;
 }

@@ -14,7 +14,7 @@ all	: bin/mps
 
 # optimized version 
 bin/mps : src/main.cpp
-	$(CC) -std=c++11 $^ -o $@
+	$(CC) -std=c++11 -Wall -Wextra -Werror $^ -o $@
 
 # clean all the .o and executable files
 clean:

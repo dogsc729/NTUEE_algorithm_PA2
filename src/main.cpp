@@ -17,10 +17,44 @@
 #include <map>
 
 using namespace std;
-int **MAXIMUM_PLANAR_SUBSET(std::map<int, int>, int);
+int **MAXIMUM_PLANAR_SUBSET(int *, int);
+void CHORD_OF_MPS(int **, int *, int, int, map<int, int> &);
 void help_message()
 {
     cout << "usage: ./mps <input file name> <output file name>" << endl;
+}
+struct comp
+{
+    template <typename T>
+
+    // Comparator function
+    bool operator()(const T &l,
+                    const T &r) const
+    {
+        if (l.first != r.first)
+        {
+            return l.first < r.first;
+        }
+        return l.second < r.second;
+    }
+};
+
+// Function to sort the map according
+// to value in a (key-value) pairs
+void sort(map<int, int> &chordset,fstream& fout)
+{
+
+    // Declare set of pairs and insert
+    // pairs according to the comparator
+    // function comp()
+    set<pair<int, int>, comp> S(chordset.begin(),
+                                chordset.end());
+    // Print the sorted value
+    for (auto &it : S)
+    {
+        fout << it.first << ' '
+             << it.second << endl;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -40,7 +74,7 @@ int main(int argc, char *argv[])
     int size;
     fin >> size;
     int i, j;
-    map<int, int> chord;
+    int *chord = new int[size];
     while (fin >> i >> j)
     {
         chord[i] = j;
@@ -51,17 +85,20 @@ int main(int argc, char *argv[])
     /////////////print out the size/////////////////////
     fout << table[0][size - 1] << endl;
     /////////////print out the chord////////////////////
-    for (int i = 0; i < size - 1; i++)
+    /*for (int i = 0; i < size - 1; i++)
     {
         if (table[i][size - 1] - table[i + 1][size - 1] > 0)
             fout << i << " " << chord[i] << endl;
-    }
+    }*/
+    map<int, int> chordset;
+    CHORD_OF_MPS(table, chord, 0, size, chordset);
+    sort(chordset,fout);
     fin.close();
     fout.close();
     return 0;
 }
 ///////////////construct the table///////////////////////////
-int **MAXIMUM_PLANAR_SUBSET(map<int, int> chord, int n)
+int **MAXIMUM_PLANAR_SUBSET(int *chord, int n)
 {
     int size = 2 * n;
     int **M = new int *[size];
@@ -97,3 +134,27 @@ int **MAXIMUM_PLANAR_SUBSET(map<int, int> chord, int n)
     }
     return M;
 }
+void CHORD_OF_MPS(int **M, int *chord, int start, int end, map<int, int> &chordset)
+{
+    if (start == end)
+        return;
+    int i = start;
+    int j = end - 1;
+    while (j != i)
+    {
+        if (M[i][j] - M[i][j - 1] > 0)
+        {
+            CHORD_OF_MPS(M, chord, i, chord[j], chordset);
+            CHORD_OF_MPS(M, chord, chord[j] + 1, j, chordset);
+            //cout << chord[j] << " " << j << endl;
+            chordset[chord[j]] = j;
+            break;
+        }
+        else
+            j--;
+    }
+    return;
+}
+// Comparison function for sorting the
+// set by increasing order of its pair's
+// second value

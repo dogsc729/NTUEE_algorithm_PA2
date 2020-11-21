@@ -64,8 +64,6 @@ int main(int argc, char *argv[])
         help_message();
         return 0;
     }
-    CommonNs::TmUsage tmusg;
-    CommonNs::TmStat stat;
     //////////// read the input file /////////////
 
     fstream fin(argv[1]);
